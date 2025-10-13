@@ -1,0 +1,181 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-model-monitoring
+  namespace: ml-monitoring
+  labels:
+    app: ai-model-monitoring
+    version: v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ai-model-monitoring
+  template:
+    metadata:
+      labels:
+        app: ai-model-monitoring
+        version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: monitoring-service
+        image: crashbytes/ai-model-monitoring:latest
+        ports:
+        - containerPort: 8000
+          name: http
+          protocol: TCP
+        env:
+        - name: DEBUG
+          value: "false"
+        - name: WORKERS
+          value: "4"
+        - name: PSI_WARNING_THRESHOLD
+          value: "0.1"
+        - name: PSI_ALERT_THRESHOLD
+          value: "0.25"
+        - name: DRIFT_CHECK_INTERVAL
+          value: "3600"
+        - name: SLACK_WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: monitoring-secrets
+              key: slack-webhook-url
+              optional: true
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-model-monitoring
+  namespace: ml-monitoring
+  labels:
+    app: ai-model-monitoring
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+    name: http
+  selector:
+    app: ai-model-monitoring
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ai-model-monitoring-hpa
+  namespace: ml-monitoring
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ai-model-monitoring
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ai-model-monitoring
+  namespace: ml-monitoring
+  labels:
+    app: ai-model-monitoring
+spec:
+  selector:
+    matchLabels:
+      app: ai-model-monitoring
+  endpoints:
+  - port: http
+    interval: 30s
+    path: /metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: ai-model-drift-alerts
+  namespace: ml-monitoring
+  labels:
+    prometheus: kube-prometheus
+spec:
+  groups:
+  - name: ml_model_drift
+    interval: 60s
+    rules:
+    - alert: SignificantModelDrift
+      expr: ml_feature_drift_score{drift_method="psi"} > 0.25
+      for: 5m
+      labels:
+        severity: critical
+        component: ml-monitoring
+      annotations:
+        summary: "Significant drift detected for {{ $labels.model_name }}/{{ $labels.feature_name }}"
+        description: "PSI score {{ $value }} exceeds alert threshold of 0.25"
+        
+    - alert: ModerateModelDrift
+      expr: ml_feature_drift_score{drift_method="psi"} > 0.1
+      for: 10m
+      labels:
+        severity: warning
+        component: ml-monitoring
+      annotations:
+        summary: "Moderate drift detected for {{ $labels.model_name }}/{{ $labels.feature_name }}"
+        description: "PSI score {{ $value }} exceeds warning threshold of 0.1"
+        
+    - alert: ModelAccuracyDegradation
+      expr: ml_model_accuracy{metric_window="24h"} < 0.85
+      for: 15m
+      labels:
+        severity: warning
+        component: ml-monitoring
+      annotations:
+        summary: "Model accuracy below threshold for {{ $labels.model_name }}"
+        description: "Accuracy {{ $value }} is below 85% for 15 minutes"
+        
+    - alert: HighPredictionLatency
+      expr: histogram_quantile(0.95, rate(ml_prediction_latency_seconds_bucket[5m])) > 1.0
+      for: 5m
+      labels:
+        severity: warning
+        component: ml-monitoring
+      annotations:
+        summary: "High prediction latency for {{ $labels.model_name }}"
+        description: "95th percentile latency {{ $value }}s exceeds 1 second"

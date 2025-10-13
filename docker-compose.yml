@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  monitoring-service:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=true
+      - PSI_WARNING_THRESHOLD=0.1
+      - PSI_ALERT_THRESHOLD=0.25
+      - DRIFT_CHECK_INTERVAL=300
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - prometheus
+    networks:
+      - ml-monitoring
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+    networks:
+      - ml-monitoring
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./dashboards:/etc/grafana/provisioning/dashboards
+    depends_on:
+      - prometheus
+    networks:
+      - ml-monitoring
+
+volumes:
+  prometheus-data:
+  grafana-data:
+
+networks:
+  ml-monitoring:
+    driver: bridge

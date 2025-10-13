@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+*.egg-info/
+dist/
+build/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+.Trashes
+.Spotlight-V100
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Data files
+*.pkl
+*.csv
+*.parquet
+test_data/
+reference_data/
+
+# Kubernetes secrets
+k8s/secrets/
+*.secret.yaml
+
+# Logs
+*.log
+logs/
+
+# Docker
+.dockerignore
