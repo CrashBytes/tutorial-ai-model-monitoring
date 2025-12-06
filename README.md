@@ -6,17 +6,17 @@ Production-grade AI model monitoring system with drift detection, performance tr
 ![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.104-green.svg)
 
-**📚 Full Tutorial:** [CrashBytes - Enterprise AI Model Monitoring](https://crashbytes.com/articles/tutorial-enterprise-ai-model-monitoring-observability-production-2025)
+**Full Tutorial:** [CrashBytes - Enterprise AI Model Monitoring](https://crashbytes.com/articles/tutorial-enterprise-ai-model-monitoring-observability-production-2025)
 
 ## Features
 
-- ✅ **Statistical Drift Detection**: PSI, KS test, Jensen-Shannon divergence
-- ✅ **Real-time Performance Tracking**: Accuracy, precision, recall, F1 score
-- ✅ **Prometheus Integration**: Production-ready metrics exposition
-- ✅ **Custom Grafana Dashboards**: Comprehensive model observability
-- ✅ **Automated Alerting**: Drift, performance degradation, data quality
-- ✅ **Kubernetes Native**: Deployment, autoscaling, health checks
-- ✅ **Production Ready**: Battle-tested across Fortune 500 AI platforms
+- **Statistical Drift Detection**: PSI, KS test, Jensen-Shannon divergence
+- **Real-time Performance Tracking**: Accuracy, precision, recall, F1 score
+- **Prometheus Integration**: Production-ready metrics exposition
+- **Custom Grafana Dashboards**: Comprehensive model observability
+- **Automated Alerting**: Drift, performance degradation, data quality
+- **Kubernetes Native**: Deployment, autoscaling, health checks
+- **Production Ready**: Battle-tested across Fortune 500 AI platforms
 
 ## Quick Start
 
@@ -313,6 +313,6 @@ Built with production lessons learned from deploying AI monitoring systems acros
 
 ---
 
-**⭐ If this tutorial helped you, please star the repository!**
+**If this tutorial helped you, please star the repository!**
 
-Made with ❤️ by the [CrashBytes](https://crashbytes.com) team
+Made by the [CrashBytes](https://crashbytes.com) team
