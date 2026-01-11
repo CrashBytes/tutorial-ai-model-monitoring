@@ -1,10 +1,12 @@
 # Enterprise AI Model Monitoring and Observability
 
-Production-grade AI model monitoring system with drift detection, performance tracking, and automated alerting for Kubernetes environments.
-
+[![Tests](https://github.com/CrashBytes/tutorial-ai-model-monitoring/workflows/Tests/badge.svg)](https://github.com/CrashBytes/tutorial-ai-model-monitoring/actions)
+[![codecov](https://codecov.io/gh/CrashBytes/tutorial-ai-model-monitoring/branch/main/graph/badge.svg)](https://codecov.io/gh/CrashBytes/tutorial-ai-model-monitoring)
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.104-green.svg)
+
+Production-grade AI model monitoring system with drift detection, performance tracking, and automated alerting for Kubernetes environments.
 
 **Full Tutorial:** [CrashBytes - Enterprise AI Model Monitoring](https://crashbytes.com/articles/tutorial-enterprise-ai-model-monitoring-observability-production-2025)
 
