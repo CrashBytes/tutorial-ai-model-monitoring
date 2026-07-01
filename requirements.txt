@@ -1,12 +1,12 @@
-fastapi==0.137.1
+fastapi==0.138.2
 uvicorn[standard]==0.49.0
 prometheus-client==0.25.0
 pandas==3.0.3
-numpy==2.4.6
-scipy==1.17.1
+numpy==2.5.0
+scipy==1.18.0
 scikit-learn==1.9.0
 pydantic==2.13.4
-pydantic-settings==2.14.1
+pydantic-settings==2.14.2
 httpx==0.28.1
 python-multipart==0.0.32
 aiofiles==25.1.0
@@ -16,7 +16,7 @@ idna>=3.15
 Pygments>=2.20.0
 
 # Testing
-pytest==9.1.0
+pytest==9.1.1
 pytest-cov==7.1.0
 pytest-asyncio==1.4.0
 httpx==0.28.1
