@@ -2,7 +2,7 @@ fastapi==0.141.1
 uvicorn[standard]==0.52.0
 prometheus-client==0.26.0
 pandas==3.0.5
-numpy==2.5.1
+numpy==2.4.6
 scipy==1.18.0
 scikit-learn==1.9.0
 pydantic==2.13.4
