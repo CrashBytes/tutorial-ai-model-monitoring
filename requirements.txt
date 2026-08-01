@@ -1,7 +1,7 @@
-fastapi==0.139.0
-uvicorn[standard]==0.51.0
-prometheus-client==0.25.0
-pandas==3.0.3
+fastapi==0.141.1
+uvicorn[standard]==0.52.0
+prometheus-client==0.26.0
+pandas==3.0.5
 numpy==2.5.1
 scipy==1.18.0
 scikit-learn==1.9.0
