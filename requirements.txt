@@ -12,7 +12,7 @@ python-multipart==0.0.32
 aiofiles==25.1.0
 
 # Security: transitive dep floor pins
-idna>=3.15
+idna>=3.19
 Pygments>=2.20.0
 
 # Testing
