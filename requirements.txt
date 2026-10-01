@@ -1,9 +1,9 @@
-fastapi==0.141.1
-uvicorn[standard]==0.53.0
+fastapi==0.142.2
+uvicorn[standard]==0.54.0
 prometheus-client==0.26.0
-pandas==3.0.5
-numpy==2.5.3
-scipy==1.18.1
+pandas==3.0.6
+numpy==2.4.6
+scipy==1.17.1
 scikit-learn==1.9.1
 pydantic==2.13.5
 pydantic-settings==2.15.0
@@ -23,5 +23,5 @@ httpx==0.28.1
 
 # Development
 black==26.5.1
-flake8==7.3.0
+flake8==7.4.1
 mypy==2.3.1
